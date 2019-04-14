@@ -49,3 +49,7 @@ test/integration
 
 # Excel temp files
 app/mappings/~*
+
+# gradle
+out/
+build/
