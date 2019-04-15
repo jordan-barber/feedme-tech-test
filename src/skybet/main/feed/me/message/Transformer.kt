@@ -1,6 +1,7 @@
 package skybet.main.feed.me.message
 
-import java.util.ArrayList
+import java.util.*
+import java.util.stream.Collectors
 
 class Transformer {
   fun transform(msg: String): Event? {
@@ -22,13 +23,9 @@ class Transformer {
   }
 
 
-  private fun deleteEmptyItems(dataStream: Array<String>): ArrayList<String> {
-    val streamItems = ArrayList<String>()
-    for (i in dataStream.indices) {
-      if (!dataStream[i].isEmpty()) {
-        streamItems.add(dataStream[i])
-      }
-    }
-    return streamItems
+  private fun deleteEmptyItems(dataStream: Array<String>): List<String> {
+    val items: List<String> = dataStream.toList<String>();
+
+    return items.filter { x -> !x.isEmpty() }
   }
 }
