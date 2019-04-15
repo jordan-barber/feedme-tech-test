@@ -26,6 +26,10 @@ class Transformer {
   private fun deleteEmptyItems(dataStream: Array<String>): List<String> {
     val items: List<String> = dataStream.toList<String>();
 
-    return items.filter { x -> !x.isEmpty() }
+    val collection: ArrayList<String> = ArrayList<String>();
+
+    items.filter { x -> !x.isEmpty() }.toCollection(collection);
+
+    return collection;
   }
 }
