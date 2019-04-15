@@ -1,5 +1,6 @@
 package skybet.main.feed.me
 
+import skybet.main.feed.me.message.Event
 import skybet.main.feed.me.message.FeedMeDataHeader
 import skybet.main.feed.me.message.Transformer
 import java.io.BufferedReader
@@ -13,12 +14,10 @@ fun main(args : Array<String>) {
 
     val inFromServer: BufferedReader = BufferedReader(InputStreamReader(client.getInputStream()));
 
-    println("PRE TRANSFORMED MESSAGE ${inFromServer.readLine()}")
-
-    val transformedMessage: FeedMeDataHeader = Transformer().transform(inFromServer.readLine());
-
-    println("POST TRANSFORMED MESSAGE ${transformedMessage.toString()}")
-//    }
+    while(client.isConnected) {
+      val transformedMessage: Event? = Transformer().transform(inFromServer.readLine());
+      println("POST TRANSFORMED MESSAGE ${transformedMessage}")
+    }
   } catch(e: Exception) {
     println("EXCEPTION THROWN " + e)
   }

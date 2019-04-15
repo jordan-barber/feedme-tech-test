@@ -2,19 +2,25 @@ package skybet.main.feed.me.message
 
 import java.util.ArrayList
 
-
-
 class Transformer {
-  fun transform(msg: String): FeedMeDataHeader {
+  fun transform(msg: String): Event? {
+    var event: Event? = null;
+
     val cleanStream = msg.replace(("\\\\" + "\\|").toRegex(), " ")
     val dataStream = cleanStream.split("\\|".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-    val itemsList = deleteEmptyItems(dataStream)
-    val feedMeDataHeader = FeedMeDataHeader(itemsList[0].toInt(), itemsList[1], itemsList[2], itemsList[3].toLong())
+    val messageData = deleteEmptyItems(dataStream)
+    val feedMeDataHeader = FeedMeDataHeader(messageData[0].toInt(), messageData[1], messageData[2], messageData[3].toLong())
 
-    println("WHAT IS INSIDE ME!!!! $feedMeDataHeader")
+    println("MESSAGE DATA ${messageData.toString()}")
 
-    return feedMeDataHeader
+    return when(messageData.get(2)) {
+      "event" -> Event(feedMeDataHeader, messageData.get(4), messageData.get(5), messageData.get(6), messageData.get(7), messageData.get(8).toLong(), messageData.get(9).toBoolean(), messageData.get(10).toBoolean());
+      "market" -> Market(feedMeDataHeader, messageData.get(4), messageData.get(5), messageData.get(6), messageData.get(7).toBoolean(), messageData.get(8).toBoolean());
+      "outcome" -> Outcome(feedMeDataHeader, messageData.get(4), messageData.get(5), messageData.get(6), messageData.get(7), messageData.get(8).toBoolean(), messageData.get(9).toBoolean());
+      else -> null
+    }
   }
+
 
   private fun deleteEmptyItems(dataStream: Array<String>): ArrayList<String> {
     val streamItems = ArrayList<String>()
